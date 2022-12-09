@@ -32,6 +32,12 @@ namespace VideoMonitor.Controllers
             return await _serverService.GetByIdAsync(serverId);
         }
 
+        [HttpGet(Name = "servers/available/{serverId}​")]
+        public async Task<bool> IsAvailableAsync(Guid serverId)
+        {
+            return await _serverService.IsAvailableAsync(serverId);
+        }
+
         [HttpGet(Name = "servers")]
         public async Task<IEnumerable<Server>> GetAsync()
         {

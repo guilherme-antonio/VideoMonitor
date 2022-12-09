@@ -11,11 +11,13 @@ namespace VideoMonitor.Tests.Services
     {
         private readonly IServerService _serverService;
         private readonly Mock<IServerRepository> _serverRepository;
+        private readonly Mock<IPingService> _pingService;
 
         public ServerServiceTest()
         {
             _serverRepository = new Mock<IServerRepository>();
-            _serverService = new ServerService(_serverRepository.Object);
+            _pingService = new Mock<IPingService>();
+            _serverService = new ServerService(_serverRepository.Object, _pingService.Object);
         }
 
         [Fact]
@@ -52,6 +54,27 @@ namespace VideoMonitor.Tests.Services
             _serverRepository.Verify(x => x.GetByIdAsync(serverId));
 
             retrievedServer.Should().Be(server);
+        }
+
+        [Fact]
+        public async Task IsAvailableAsync_FoundServerById_CallPingServiceWithServerHostAndPort()
+        {
+            var serverId = Guid.NewGuid();
+
+            var host = "172.0.0.1";
+            var port = 15678;
+
+            var isAvailable = true;
+
+            _serverRepository.Setup(x => x.GetHostAndPortByIdAsync(serverId)).ReturnsAsync((host, port));
+            _pingService.Setup(x => x.IsAvailableAsync(host, port)).ReturnsAsync(isAvailable);
+
+            var isAvailableReturn = await _serverService.IsAvailableAsync(serverId);
+
+            _serverRepository.Verify(x => x.GetHostAndPortByIdAsync(serverId));
+            _pingService.Verify(x => x.IsAvailableAsync(host, port));
+
+            isAvailableReturn.Should().Be(isAvailable);
         }
     }
 }
