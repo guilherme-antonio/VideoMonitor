@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33122.133
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoMonitor", "VideoMonitor\VideoMonitor.csproj", "{D954F1A0-8695-4BAE-9B3D-1C6A9226B685}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoMonitor.Tests", "VideoMonitor.Tests\VideoMonitor.Tests.csproj", "{797C6376-A1BA-4828-9FEB-A4E9BB72EECB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D954F1A0-8695-4BAE-9B3D-1C6A9226B685}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D954F1A0-8695-4BAE-9B3D-1C6A9226B685}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D954F1A0-8695-4BAE-9B3D-1C6A9226B685}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D954F1A0-8695-4BAE-9B3D-1C6A9226B685}.Release|Any CPU.Build.0 = Release|Any CPU
+		{797C6376-A1BA-4828-9FEB-A4E9BB72EECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{797C6376-A1BA-4828-9FEB-A4E9BB72EECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{797C6376-A1BA-4828-9FEB-A4E9BB72EECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{797C6376-A1BA-4828-9FEB-A4E9BB72EECB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4B1A24E2-63FD-4298-8237-2AA04D501AA2}
+	EndGlobalSection
+EndGlobal
