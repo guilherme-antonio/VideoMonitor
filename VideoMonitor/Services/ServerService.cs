@@ -26,6 +26,11 @@ namespace VideoMonitor.Services
             await _serverRepository.DeleteAsync(serverId);
         }
 
+        public async Task<IEnumerable<Server>> GetAllAsync()
+        {
+            return await _serverRepository.GetAllAsync();
+        }
+
         public async Task<Server> GetByIdAsync(Guid serverId)
         {
             return await _serverRepository.GetByIdAsync(serverId);

@@ -39,9 +39,9 @@ namespace VideoMonitor.Controllers
         }
 
         [HttpGet(Name = "servers")]
-        public async Task<IEnumerable<Server>> GetAsync()
+        public async Task<IEnumerable<Server>> GetAllAsync()
         {
-            return new List<Server>();
+            return await _serverService.GetAllAsync();
         }
     }
 }

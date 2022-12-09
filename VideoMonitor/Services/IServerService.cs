@@ -8,5 +8,6 @@ namespace VideoMonitor.Services
         Task DeleteAsync(Guid serverId);
         Task<Server> GetByIdAsync(Guid serverId);
         Task<bool> IsAvailableAsync(Guid serverId);
+        Task<IEnumerable<Server>> GetAllAsync();
     }
 }

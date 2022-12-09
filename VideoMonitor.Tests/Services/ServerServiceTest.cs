@@ -76,5 +76,17 @@ namespace VideoMonitor.Tests.Services
 
             isAvailableReturn.Should().Be(isAvailable);
         }
+
+        [Fact]
+        public async Task GetAllAsync_ExistsServers_ReturnAllServers()
+        {
+            var servers = new List<Server>();
+
+            _serverRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(servers);
+
+            var returnedServers =  await _serverService.GetAllAsync();
+
+            returnedServers.Should().BeSameAs(servers);
+        }
     }
 }
