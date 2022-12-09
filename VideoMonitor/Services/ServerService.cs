@@ -12,9 +12,19 @@ namespace VideoMonitor.Services
             _serverRepository = serverRepository;
         }
 
-        public void Add(Server server)
+        public async Task AddAsync(Server server)
         {
-            _serverRepository.Add(server);
+            await _serverRepository.AddAsync(server);
+        }
+
+        public async Task DeleteAsync(Guid serverId)
+        {
+            await _serverRepository.DeleteAsync(serverId);
+        }
+
+        public async Task<Server> GetByIdAsync(Guid serverId)
+        {
+            return await _serverRepository.GetByIdAsync(serverId);
         }
     }
 }

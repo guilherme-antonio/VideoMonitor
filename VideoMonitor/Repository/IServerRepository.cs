@@ -4,6 +4,8 @@ namespace VideoMonitor.Repository
 {
     public interface IServerRepository
     {
-        void Add(Server server);
+        Task AddAsync(Server server);
+        Task DeleteAsync(Guid serverId);
+        Task<Server> GetByIdAsync(Guid serverId);
     }
 }

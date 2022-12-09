@@ -4,6 +4,8 @@ namespace VideoMonitor.Services
 {
     public interface IServerService
     {
-        void Add(Server server);
+        Task AddAsync(Server server);
+        Task DeleteAsync(Guid serverId);
+        Task<Server> GetByIdAsync(Guid serverId);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using FluentAssertions;
+using Moq;
 using VideoMonitor.Domain;
 using VideoMonitor.Repository;
 using VideoMonitor.Services;
@@ -18,13 +19,39 @@ namespace VideoMonitor.Tests.Services
         }
 
         [Fact]
-        public void AddServer_IsValidServer_AddOnRepository()
+        public async Task AddAsync_IsValidServer_AddOnRepository()
         {
             var server = new Server();
 
-            _serverService.Add(server);
+            await _serverService.AddAsync(server);
 
-            _serverRepository.Verify(x => x.Add(server));
+            _serverRepository.Verify(x => x.AddAsync(server));
+        }
+
+        [Fact]
+        public async Task DeleteAsync_ReceiveServerId_DeleteFromRepositoryByServerId()
+        {
+            var serverId = Guid.NewGuid();
+
+            await _serverService.DeleteAsync(serverId);
+
+            _serverRepository.Verify(x => x.DeleteAsync(serverId));
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_ReceiveServerId_RetrieveServerWithServerId()
+        {
+            var serverId = Guid.NewGuid();
+
+            var server = new Server();
+
+            _serverRepository.Setup(x => x.GetByIdAsync(serverId)).ReturnsAsync(server);
+
+            var retrievedServer = await _serverService.GetByIdAsync(serverId);
+
+            _serverRepository.Verify(x => x.GetByIdAsync(serverId));
+
+            retrievedServer.Should().Be(server);
         }
     }
 }
