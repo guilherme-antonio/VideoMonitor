@@ -7,13 +7,13 @@ using Xunit;
 
 namespace VideoMonitor.Tests.Services
 {
-    public class ServerServiceTest
+    public class ServerServiceTests
     {
         private readonly IServerService _serverService;
         private readonly Mock<IServerRepository> _serverRepository;
         private readonly Mock<IPingService> _pingService;
 
-        public ServerServiceTest()
+        public ServerServiceTests()
         {
             _serverRepository = new Mock<IServerRepository>();
             _pingService = new Mock<IPingService>();
