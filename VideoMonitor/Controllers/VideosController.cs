@@ -21,9 +21,15 @@ namespace VideoMonitor.Controllers
         }
 
         [HttpDelete(Name = "/api/servers/{serverId}/videos/{videoId}​")]
-        public async Task DeleteAsync(Guid videoId)
+        public async Task DeleteAsync(Guid serverId, Guid videoId)
         {
             await _videoService.DeleteAsync(videoId);
+        }
+
+        [HttpGet(Name = "/api/servers/{serverId}/videos/{videoId}​")]
+        public async Task<Video> GetByIdAsync(Guid serverId, Guid videoId)
+        {
+            return await _videoService.GetByIdAsync(videoId);
         }
     }
 }

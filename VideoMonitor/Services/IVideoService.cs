@@ -6,5 +6,6 @@ namespace VideoMonitor.Services
     {
         Task AddAsync(Video video);
         Task DeleteAsync(Guid videoId);
+        Task<Video> GetByIdAsync(Guid videoId);
     }
 }

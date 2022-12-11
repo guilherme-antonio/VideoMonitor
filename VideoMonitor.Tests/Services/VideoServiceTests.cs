@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using FluentAssertions;
+using Moq;
 using VideoMonitor.Domain;
 using VideoMonitor.Repository;
 using VideoMonitor.Services;
@@ -35,6 +36,22 @@ namespace VideoMonitor.Tests.Services
             await _videoService.DeleteAsync(videoId);
 
             _videoRepository.Verify(x => x.DeleteAsync(videoId));
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_ReceiveVideoId_RetrieveVideoWithVideoId()
+        {
+            var videoId = Guid.NewGuid();
+
+            var video = new Video();
+
+            _videoRepository.Setup(x => x.GetByIdAsync(videoId)).ReturnsAsync(video);
+
+            var retrievedVideo = await _videoService.GetByIdAsync(videoId);
+
+            _videoRepository.Verify(x => x.GetByIdAsync(videoId));
+
+            retrievedVideo.Should().Be(video);
         }
     }
 }
