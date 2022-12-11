@@ -1,4 +1,4 @@
-﻿using VideoMonitor.Domain;
+﻿using VideoMonitor.Models;
 
 namespace VideoMonitor.Repository
 {

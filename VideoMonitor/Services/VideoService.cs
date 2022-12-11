@@ -1,5 +1,6 @@
-﻿using VideoMonitor.Domain;
+﻿using VideoMonitor.Models;
 using VideoMonitor.Repository;
+using VideoMonitor.Resources;
 
 namespace VideoMonitor.Services
 {
@@ -12,8 +13,12 @@ namespace VideoMonitor.Services
             _videoRepository = videoRepository;
         }
 
-        public async Task AddAsync(Video video)
+        public async Task AddAsync(VideoResource videoResource, Guid serverId)
         {
+            var video = new Video()
+            {
+                Description= videoResource.Description
+            };
             await _videoRepository.AddAsync(video);
         }
 

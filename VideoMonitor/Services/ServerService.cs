@@ -1,6 +1,4 @@
-﻿using System.Net;
-using System.Net.NetworkInformation;
-using VideoMonitor.Domain;
+﻿using VideoMonitor.Models;
 using VideoMonitor.Repository;
 
 namespace VideoMonitor.Services

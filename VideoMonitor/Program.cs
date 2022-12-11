@@ -1,3 +1,4 @@
+using VideoMonitor.Context;
 using VideoMonitor.Repository;
 using VideoMonitor.Services;
 
@@ -16,6 +17,8 @@ builder.Services.AddSingleton<IPingService, PingService>();
 
 builder.Services.AddScoped<IServerRepository, ServerRepository>();
 builder.Services.AddScoped<IVideoRepository, VideoRepository>();
+
+builder.Services.AddTransient<VideoMonitorContext>();
 
 var app = builder.Build();
 

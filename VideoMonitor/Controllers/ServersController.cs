@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VideoMonitor.Domain;
+using VideoMonitor.Models;
 using VideoMonitor.Services;
 
 namespace VideoMonitor.Controllers

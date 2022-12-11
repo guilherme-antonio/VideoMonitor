@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VideoMonitor.Domain;
+using VideoMonitor.Models;
 using VideoMonitor.Services;
+using VideoMonitor.Resources;
 
 namespace VideoMonitor.Controllers
 {
@@ -16,9 +17,9 @@ namespace VideoMonitor.Controllers
         }
 
         [HttpPost]
-        public async Task AddAsync(Guid serverId, Video video)
+        public async Task AddAsync(Guid serverId, VideoResource videoResource)
         {
-            await _videoService.AddAsync(video);
+            await _videoService.AddAsync(videoResource, serverId);
         }
 
         [HttpDelete]
