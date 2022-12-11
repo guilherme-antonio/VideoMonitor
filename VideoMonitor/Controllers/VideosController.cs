@@ -15,9 +15,15 @@ namespace VideoMonitor.Controllers
         }
 
         [HttpPost(Name = "servers/{serverId}/videos​")]
-        public async Task AddAsync(Video video)
+        public async Task AddAsync(Guid serverId, Video video)
         {
             await _videoService.AddAsync(video);
+        }
+
+        [HttpDelete(Name = "/api/servers/{serverId}/videos/{videoId}​")]
+        public async Task DeleteAsync(Guid videoId)
+        {
+            await _videoService.DeleteAsync(videoId);
         }
     }
 }

@@ -16,5 +16,10 @@ namespace VideoMonitor.Services
         {
             await _videoRepository.AddAsync(video);
         }
+
+        public async Task DeleteAsync(Guid videoId)
+        {
+            await _videoRepository.DeleteAsync(videoId);
+        }
     }
 }

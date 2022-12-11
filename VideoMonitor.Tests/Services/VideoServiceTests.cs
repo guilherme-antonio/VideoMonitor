@@ -26,5 +26,15 @@ namespace VideoMonitor.Tests.Services
 
             _videoRepository.Verify(x => x.AddAsync(video));
         }
+
+        [Fact]
+        public async Task DeleteAsync_ReceiveVideoId_DeleteFromRepositoryByVideoId()
+        {
+            var videoId = Guid.NewGuid();
+
+            await _videoService.DeleteAsync(videoId);
+
+            _videoRepository.Verify(x => x.DeleteAsync(videoId));
+        }
     }
 }
