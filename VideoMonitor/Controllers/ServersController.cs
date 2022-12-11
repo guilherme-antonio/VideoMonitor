@@ -5,40 +5,44 @@ using VideoMonitor.Services;
 namespace VideoMonitor.Controllers
 {
     [ApiController]
-    public class ServerController : ControllerBase
+    [Route("[controller]")]
+    public class ServersController : ControllerBase
     {
         private readonly IServerService _serverService;
 
-        public ServerController(IServerService serverService)
+        public ServersController(IServerService serverService)
         {
             _serverService = serverService;
         }
 
-        [HttpPost(Name = "server​")]
+        [HttpPost]
         public async Task AddAsync(Server server)
         {
             await _serverService.AddAsync(server);
         }
 
-        [HttpDelete(Name = "servers/{serverId}​")]
+        [HttpDelete]
+        [Route("{serverId}​")]
         public async Task DeleteAsync(Guid serverId)
         {
             await _serverService.DeleteAsync(serverId);
         }
 
-        [HttpGet(Name = "servers/{serverId}​")]
+        [HttpGet]
+        [Route("{serverId}​")]
         public async Task<Server> GetByIdAsync(Guid serverId)
         {
             return await _serverService.GetByIdAsync(serverId);
         }
 
-        [HttpGet(Name = "servers/available/{serverId}​")]
+        [HttpGet]
+        [Route("available/{serverId}")]
         public async Task<bool> IsAvailableAsync(Guid serverId)
         {
             return await _serverService.IsAvailableAsync(serverId);
         }
 
-        [HttpGet(Name = "servers")]
+        [HttpGet]
         public async Task<IEnumerable<Server>> GetAllAsync()
         {
             return await _serverService.GetAllAsync();

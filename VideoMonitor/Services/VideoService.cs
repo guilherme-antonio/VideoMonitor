@@ -22,6 +22,11 @@ namespace VideoMonitor.Services
             await _videoRepository.DeleteAsync(videoId);
         }
 
+        public Task<byte[]> GetBinaryByIdAsync(Guid videoId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Video> GetByIdAsync(Guid videoId)
         {
             return await _videoRepository.GetByIdAsync(videoId);
