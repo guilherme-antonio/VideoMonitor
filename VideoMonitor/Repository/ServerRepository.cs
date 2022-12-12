@@ -6,36 +6,42 @@ namespace VideoMonitor.Repository
 {
     public class ServerRepository : IServerRepository
     {
+        private readonly VideoMonitorContext _context;
+
         private DbSet<Server> _servers { get; set; }
 
         public ServerRepository(VideoMonitorContext context)
         {
             _servers = context.Servers;
+            _context = context;
         }
 
         public async Task AddAsync(Server server)
         {
             await _servers.AddAsync(server);
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(Guid serverId)
+        public async Task DeleteAsync(Guid serverId)
         {
-            throw new NotImplementedException();
+            await _servers.Where(x => x.Id == serverId).ExecuteDeleteAsync();
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<Server>> GetAllAsync()
+        public async Task<IEnumerable<Server>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _servers.ToListAsync();
         }
 
-        public Task<Server> GetByIdAsync(Guid serverId)
+        public async Task<Server> GetByIdAsync(Guid serverId)
         {
-            throw new NotImplementedException();
+            return await _servers.Where(x => x.Id == serverId).FirstOrDefaultAsync();
         }
 
-        public Task<(string, int)> GetHostAndPortByIdAsync(Guid serverId)
+        public async Task<(string, int)> GetHostAndPortByIdAsync(Guid serverId)
         {
-            throw new NotImplementedException();
+            return await _servers.Where(x => x.Id == serverId)
+                .Select(x => new(string, int) (x.Ip, x.Port ));
         }
     }
 }
