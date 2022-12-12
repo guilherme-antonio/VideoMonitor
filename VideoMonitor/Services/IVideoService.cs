@@ -5,7 +5,7 @@ namespace VideoMonitor.Services
 {
     public interface IVideoService
     {
-        Task AddAsync(VideoResource videoResource, Guid serverId);
+        Task AddAsync(VideoAddResource videoResource, Guid serverId);
         Task DeleteAsync(Guid videoId);
         Task<IEnumerable<Video>> GetAllAsync();
         Task<byte[]> GetBinaryByIdAsync(Guid videoId);

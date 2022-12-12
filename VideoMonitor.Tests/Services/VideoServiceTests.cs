@@ -23,7 +23,7 @@ namespace VideoMonitor.Tests.Services
         public async Task AddAsync_IsValidVideo_AddOnRepository()
         {
             var description = "video";
-            var video = new VideoResource()
+            var video = new VideoAddResource()
             {
                 Description= description
             };

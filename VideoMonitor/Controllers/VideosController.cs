@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VideoMonitor.Models;
-using VideoMonitor.Services;
 using VideoMonitor.Resources;
+using VideoMonitor.Services;
 
 namespace VideoMonitor.Controllers
 {
@@ -17,7 +16,7 @@ namespace VideoMonitor.Controllers
         }
 
         [HttpPost]
-        public async Task AddAsync(Guid serverId, VideoResource videoResource)
+        public async Task AddAsync(Guid serverId, VideoAddResource videoResource)
         {
             await _videoService.AddAsync(videoResource, serverId);
         }
@@ -31,9 +30,14 @@ namespace VideoMonitor.Controllers
 
         [HttpGet]
         [Route("{videoId}​")]
-        public async Task<Video> GetByIdAsync(Guid serverId, Guid videoId)
+        public async Task<VideoGetResource> GetByIdAsync(Guid serverId, Guid videoId)
         {
-            return await _videoService.GetByIdAsync(videoId);
+            var video = await _videoService.GetByIdAsync(videoId);
+            return new VideoGetResource()
+            {
+                Id = video.Id,
+                Description = video.Description
+            };
         }
 
         [HttpGet]
@@ -44,9 +48,13 @@ namespace VideoMonitor.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Video>> GetAllAsync()
+        public async Task<IEnumerable<VideoGetResource>> GetAllAsync()
         {
-            return await _videoService.GetAllAsync();
+            return (await _videoService.GetAllAsync()).Select(x => new VideoGetResource
+            {
+                Id = x.Id,
+                Description = x.Description
+            });
         }
     }
 }

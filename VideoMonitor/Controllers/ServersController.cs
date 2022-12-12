@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VideoMonitor.Models;
+using VideoMonitor.Resources;
 using VideoMonitor.Services;
 
 namespace VideoMonitor.Controllers
@@ -16,9 +16,9 @@ namespace VideoMonitor.Controllers
         }
 
         [HttpPost]
-        public async Task AddAsync(Server server)
+        public async Task AddAsync(ServerAddResource serverAddResource)
         {
-            await _serverService.AddAsync(server);
+            await _serverService.AddAsync(serverAddResource);
         }
 
         [HttpDelete]
@@ -30,9 +30,17 @@ namespace VideoMonitor.Controllers
 
         [HttpGet]
         [Route("{serverId}​")]
-        public async Task<Server> GetByIdAsync(Guid serverId)
+        public async Task<ServerGetResource> GetByIdAsync(Guid serverId)
         {
-            return await _serverService.GetByIdAsync(serverId);
+            var server = await _serverService.GetByIdAsync(serverId);
+
+            return new ServerGetResource()
+            {
+                Id = server.Id,
+                Ip = server.Ip,
+                Name = server.Name,
+                Port = server.Port
+            };
         }
 
         [HttpGet]
@@ -43,9 +51,15 @@ namespace VideoMonitor.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Server>> GetAllAsync()
+        public async Task<IEnumerable<ServerGetResource>> GetAllAsync()
         {
-            return await _serverService.GetAllAsync();
+            return (await _serverService.GetAllAsync()).Select(x => new ServerGetResource
+            {
+                Id= x.Id,
+                Ip= x.Ip,
+                Name= x.Name,
+                Port = x.Port
+            });
         }
     }
 }

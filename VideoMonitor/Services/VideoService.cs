@@ -13,7 +13,7 @@ namespace VideoMonitor.Services
             _videoRepository = videoRepository;
         }
 
-        public async Task AddAsync(VideoResource videoResource, Guid serverId)
+        public async Task AddAsync(VideoAddResource videoResource, Guid serverId)
         {
             var video = new Video()
             {

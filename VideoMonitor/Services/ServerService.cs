@@ -1,5 +1,6 @@
 ﻿using VideoMonitor.Models;
 using VideoMonitor.Repository;
+using VideoMonitor.Resources;
 
 namespace VideoMonitor.Services
 {
@@ -14,8 +15,15 @@ namespace VideoMonitor.Services
             _pingService = pingService;
         }
 
-        public async Task AddAsync(Server server)
+        public async Task AddAsync(ServerAddResource serverAddResource)
         {
+            var server = new Server()
+            {
+                Name = serverAddResource.Name,
+                Ip = serverAddResource.Ip,
+                Port = serverAddResource.Port,
+            };
+
             await _serverRepository.AddAsync(server);
         }
 
