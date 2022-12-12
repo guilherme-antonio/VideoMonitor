@@ -2,6 +2,6 @@
 {
     public interface IPingService
     {
-        Task<bool> IsAvailableAsync(string host, int port);
+        Task<bool> IsAvailableAsync(string ip, int port);
     }
 }

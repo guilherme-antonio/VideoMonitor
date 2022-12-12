@@ -66,12 +66,12 @@ namespace VideoMonitor.Tests.Services
 
             var isAvailable = true;
 
-            _serverRepository.Setup(x => x.GetHostAndPortByIdAsync(serverId)).ReturnsAsync((host, port));
+            _serverRepository.Setup(x => x.GetIpAndPortByIdAsync(serverId)).ReturnsAsync((host, port));
             _pingService.Setup(x => x.IsAvailableAsync(host, port)).ReturnsAsync(isAvailable);
 
             var isAvailableReturn = await _serverService.IsAvailableAsync(serverId);
 
-            _serverRepository.Verify(x => x.GetHostAndPortByIdAsync(serverId));
+            _serverRepository.Verify(x => x.GetIpAndPortByIdAsync(serverId));
             _pingService.Verify(x => x.IsAvailableAsync(host, port));
 
             isAvailableReturn.Should().Be(isAvailable);
