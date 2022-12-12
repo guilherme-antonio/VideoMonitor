@@ -42,5 +42,11 @@ namespace VideoMonitor.Controllers
         {
             return File(await _videoService.GetBinaryByIdAsync(videoId), "video/mp4") ;
         }
+
+        [HttpGet]
+        public async Task<IEnumerable<Video>> GetAllAsync()
+        {
+            return await _videoService.GetAllAsync();
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 using VideoMonitor.Models;
 
 namespace VideoMonitor.Context
@@ -7,7 +8,7 @@ namespace VideoMonitor.Context
     {
         private readonly PostgreSQLConfig _postgreSQLConfig;
         public DbSet<Server> Servers { get; set; }
-        public DbSet<Video> Videos { get; set; }
+        public DbSet<Video> Videos => Set<Video>();
 
         public VideoMonitorContext(IConfiguration configuration)
         {

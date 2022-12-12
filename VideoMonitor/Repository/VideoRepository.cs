@@ -27,5 +27,10 @@ namespace VideoMonitor.Repository
         {
             throw new NotImplementedException();
         }
+
+        public async Task<IEnumerable<Video>> GetAllAsync()
+        {
+            return await _videos.ToListAsync();
+        }
     }
 }

@@ -6,6 +6,7 @@ namespace VideoMonitor.Repository
     {
         Task AddAsync(Video video);
         Task DeleteAsync(Guid videoId);
+        Task<IEnumerable<Video>> GetAllAsync();
         Task<Video> GetByIdAsync(Guid videoId);
     }
 }

@@ -1,7 +1,8 @@
 ﻿using FluentAssertions;
 using Moq;
-using VideoMonitor.Domain;
+using VideoMonitor.Models;
 using VideoMonitor.Repository;
+using VideoMonitor.Resources;
 using VideoMonitor.Services;
 using Xunit;
 
@@ -21,11 +22,16 @@ namespace VideoMonitor.Tests.Services
         [Fact]
         public async Task AddAsync_IsValidVideo_AddOnRepository()
         {
-            var video = new Video();
+            var description = "video";
+            var video = new VideoResource()
+            {
+                Description= description
+            };
+            var serverId = Guid.NewGuid();
 
-            await _videoService.AddAsync(video);
+            await _videoService.AddAsync(video, serverId);
 
-            _videoRepository.Verify(x => x.AddAsync(video));
+            _videoRepository.Verify(x => x.AddAsync(It.Is<Video>(x => video.Description == description)));
         }
 
         [Fact]

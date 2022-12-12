@@ -17,7 +17,7 @@ namespace VideoMonitor.Services
         {
             var video = new Video()
             {
-                Description= videoResource.Description
+                Description = videoResource.Description
             };
             await _videoRepository.AddAsync(video);
         }
@@ -25,6 +25,11 @@ namespace VideoMonitor.Services
         public async Task DeleteAsync(Guid videoId)
         {
             await _videoRepository.DeleteAsync(videoId);
+        }
+
+        public async Task<IEnumerable<Video>> GetAllAsync()
+        {
+            return await _videoRepository.GetAllAsync();
         }
 
         public Task<byte[]> GetBinaryByIdAsync(Guid videoId)

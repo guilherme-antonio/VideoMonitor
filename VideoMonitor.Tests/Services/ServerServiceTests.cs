@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Moq;
-using VideoMonitor.Domain;
+using VideoMonitor.Models;
 using VideoMonitor.Repository;
 using VideoMonitor.Services;
 using Xunit;
