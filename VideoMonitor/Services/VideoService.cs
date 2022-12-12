@@ -7,11 +7,12 @@ namespace VideoMonitor.Services
     public class VideoService : IVideoService
     {
         private readonly IVideoRepository _videoRepository;
-        private string _path = $".{Path.DirectorySeparatorChar}videos";
+        private readonly IVideoFileRepository _videoFileRepository;
 
-        public VideoService(IVideoRepository videoRepository)
+        public VideoService(IVideoRepository videoRepository, IVideoFileRepository videoFileRepository)
         {
             _videoRepository = videoRepository;
+            _videoFileRepository = videoFileRepository;
         }
 
         public async Task AddAsync(VideoAddResource videoResource, Guid serverId)
@@ -21,9 +22,8 @@ namespace VideoMonitor.Services
                 Description = videoResource.Description
             };
             var videoId = await _videoRepository.AddAsync(video);
-            Directory.CreateDirectory(_path);
-            await File.Create($"{_path}{Path.DirectorySeparatorChar}{videoId}")
-                .WriteAsync(Convert.FromBase64String(videoResource.Binary));
+
+            await _videoFileRepository.SaveToFileAsync(videoId, videoResource.Binary);
         }
 
         public async Task DeleteAsync(Guid videoId)
@@ -38,7 +38,7 @@ namespace VideoMonitor.Services
 
         public async Task<string> GetBinaryByIdAsync(Guid videoId)
         {
-            return Convert.ToBase64String(await File.ReadAllBytesAsync($"{_path}{Path.DirectorySeparatorChar}{videoId}"));
+            return await _videoFileRepository.GetVideoBinaryAsync(videoId);
         }
 
         public async Task<Video> GetByIdAsync(Guid videoId)

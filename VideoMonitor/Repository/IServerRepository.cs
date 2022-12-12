@@ -8,6 +8,6 @@ namespace VideoMonitor.Repository
         Task DeleteAsync(Guid serverId);
         Task<IEnumerable<Server>> GetAllAsync();
         Task<Server> GetByIdAsync(Guid serverId);
-        Task<(string, int)> GetIpAndPortByIdAsync(Guid serverId);
+        Task<string> GetIpByIdAsync(Guid serverId);
     }
 }

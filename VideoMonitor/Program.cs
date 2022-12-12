@@ -17,6 +17,7 @@ builder.Services.AddSingleton<IPingService, PingService>();
 
 builder.Services.AddScoped<IServerRepository, ServerRepository>();
 builder.Services.AddScoped<IVideoRepository, VideoRepository>();
+builder.Services.AddSingleton<IVideoFileRepository, VideoFileRepository>();
 
 builder.Services.AddTransient<VideoMonitorContext>();
 

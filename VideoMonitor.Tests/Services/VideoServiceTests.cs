@@ -12,26 +12,34 @@ namespace VideoMonitor.Tests.Services
     {
         private readonly IVideoService _videoService;
         private readonly Mock<IVideoRepository> _videoRepository;
+        private readonly Mock<IVideoFileRepository> _fileRepository;
 
         public VideoServiceTests()
         {
             _videoRepository = new Mock<IVideoRepository>();
-            _videoService = new VideoService(_videoRepository.Object);
+            _fileRepository = new Mock<IVideoFileRepository>();
+            _videoService = new VideoService(_videoRepository.Object, _fileRepository.Object);
         }
 
         [Fact]
         public async Task AddAsync_IsValidVideo_AddOnRepository()
         {
             var description = "video";
+            var binary = "2131231231==";
             var video = new VideoAddResource()
             {
-                Description = description
+                Description = description,
+                Binary = binary
             };
             var serverId = Guid.NewGuid();
+            var videoId = Guid.NewGuid();
+
+            _videoRepository.Setup(x => x.AddAsync(It.Is<Video>(x => video.Description == description))).ReturnsAsync(videoId);
 
             await _videoService.AddAsync(video, serverId);
 
             _videoRepository.Verify(x => x.AddAsync(It.Is<Video>(x => video.Description == description)));
+            _fileRepository.Verify(x => x.SaveToFileAsync(videoId, binary));
         }
 
         [Fact]

@@ -70,22 +70,21 @@ namespace VideoMonitor.Tests.Services
         }
 
         [Fact]
-        public async Task IsAvailableAsync_FoundServerById_CallPingServiceWithServerHostAndPort()
+        public async Task IsAvailableAsync_FoundServerById_CallPingServiceWithServerIp()
         {
             var serverId = Guid.NewGuid();
 
-            var host = "172.0.0.1";
-            var port = 15678;
+            var ip = "172.0.0.1";
 
             var isAvailable = true;
 
-            _serverRepository.Setup(x => x.GetIpAndPortByIdAsync(serverId)).ReturnsAsync((host, port));
-            _pingService.Setup(x => x.IsAvailableAsync(host, port)).ReturnsAsync(isAvailable);
+            _serverRepository.Setup(x => x.GetIpByIdAsync(serverId)).ReturnsAsync(ip);
+            _pingService.Setup(x => x.IsAvailableAsync(ip)).ReturnsAsync(isAvailable);
 
             var isAvailableReturn = await _serverService.IsAvailableAsync(serverId);
 
-            _serverRepository.Verify(x => x.GetIpAndPortByIdAsync(serverId));
-            _pingService.Verify(x => x.IsAvailableAsync(host, port));
+            _serverRepository.Verify(x => x.GetIpByIdAsync(serverId));
+            _pingService.Verify(x => x.IsAvailableAsync(ip));
 
             isAvailableReturn.Should().Be(isAvailable);
         }

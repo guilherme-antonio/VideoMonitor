@@ -38,15 +38,10 @@ namespace VideoMonitor.Repository
             return await _servers.Where(x => x.Id == serverId).FirstOrDefaultAsync();
         }
 
-        public async Task<(string, int)> GetIpAndPortByIdAsync(Guid serverId)
+        public async Task<string> GetIpByIdAsync(Guid serverId)
         {
-            var ipAndPort = await _servers.Where(x => x.Id == serverId)
-                .Select(x => new { x.Ip, x.Port}).FirstOrDefaultAsync();
-
-            if (ipAndPort == null)
-                return ("", 0);
-
-            return (ipAndPort.Ip, ipAndPort.Port);
+            return await _servers.Where(x => x.Id == serverId)
+                .Select(x =>x.Ip).FirstOrDefaultAsync();
         }
     }
 }

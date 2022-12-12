@@ -44,9 +44,9 @@ namespace VideoMonitor.Services
 
         public async Task<bool> IsAvailableAsync(Guid serverId)
         {
-            (var ip, var port) = await _serverRepository.GetIpAndPortByIdAsync(serverId);
+            var ip = await _serverRepository.GetIpByIdAsync(serverId);
 
-            return await _pingService.IsAvailableAsync(ip, port);
+            return await _pingService.IsAvailableAsync(ip);
         }
     }
 }
