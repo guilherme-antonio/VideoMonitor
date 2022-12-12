@@ -25,7 +25,7 @@ namespace VideoMonitor.Tests.Services
             var description = "video";
             var video = new VideoAddResource()
             {
-                Description= description
+                Description = description
             };
             var serverId = Guid.NewGuid();
 
@@ -58,6 +58,18 @@ namespace VideoMonitor.Tests.Services
             _videoRepository.Verify(x => x.GetByIdAsync(videoId));
 
             retrievedVideo.Should().Be(video);
+        }
+
+        [Fact]
+        public async Task GetAllAsync_ExistsVideos_ReturnAllVideos()
+        {
+            var videos = new List<Video>();
+
+            _videoRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(videos);
+
+            var returnedVideos = await _videoService.GetAllAsync();
+
+            returnedVideos.Should().BeSameAs(videos);
         }
     }
 }

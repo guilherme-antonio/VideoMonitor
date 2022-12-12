@@ -2,6 +2,7 @@
 using Moq;
 using VideoMonitor.Models;
 using VideoMonitor.Repository;
+using VideoMonitor.Resources;
 using VideoMonitor.Services;
 using Xunit;
 
@@ -23,11 +24,23 @@ namespace VideoMonitor.Tests.Services
         [Fact]
         public async Task AddAsync_IsValidServer_AddOnRepository()
         {
-            var server = new Server();
+            var name = "name";
+            var ip = "127.0.0.1";
+            var port = 80;
 
-            await _serverService.AddAsync(server);
+            var serverAddResource = new ServerAddResource()
+            {
+                Name = name,
+                Ip= ip,
+                Port = port
+            };
 
-            _serverRepository.Verify(x => x.AddAsync(server));
+            await _serverService.AddAsync(serverAddResource);
+
+            _serverRepository.Verify(x => x.AddAsync(It.Is<Server>(x => 
+                x.Name == name &&
+                x.Ip == ip &&
+                x.Port == port)));
         }
 
         [Fact]
