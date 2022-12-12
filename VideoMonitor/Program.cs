@@ -15,11 +15,11 @@ builder.Services.AddTransient<IServerService, ServerService>();
 builder.Services.AddTransient<IVideoService, VideoService>();
 builder.Services.AddSingleton<IPingService, PingService>();   
 
-builder.Services.AddScoped<IServerRepository, ServerRepository>();
-builder.Services.AddScoped<IVideoRepository, VideoRepository>();
+builder.Services.AddTransient<IServerRepository, ServerRepository>();
+builder.Services.AddTransient<IVideoRepository, VideoRepository>();
 builder.Services.AddSingleton<IVideoFileRepository, VideoFileRepository>();
 
-builder.Services.AddTransient<VideoMonitorContext>();
+builder.Services.AddScoped<VideoMonitorContext>();
 
 var app = builder.Build();
 
