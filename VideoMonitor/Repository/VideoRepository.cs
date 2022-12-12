@@ -1,12 +1,21 @@
-﻿using VideoMonitor.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using VideoMonitor.Context;
+using VideoMonitor.Models;
 
 namespace VideoMonitor.Repository
 {
     public class VideoRepository : IVideoRepository
     {
-        public Task AddAsync(Video video)
+        private DbSet<Video> _videos { get; set; }
+
+        public VideoRepository(VideoMonitorContext context)
         {
-            throw new NotImplementedException();
+            _videos = context.Videos;
+        }
+
+        public async Task AddAsync(Video video)
+        {
+            await _videos.AddAsync(video);
         }
 
         public Task DeleteAsync(Guid videoId)
