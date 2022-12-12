@@ -42,9 +42,9 @@ namespace VideoMonitor.Controllers
 
         [HttpGet]
         [Route("{videoId}/binary​")]
-        public async Task<FileContentResult> GetBinaryByIdAsync(Guid serverId, Guid videoId)
+        public async Task<string> GetBinaryByIdAsync(Guid serverId, Guid videoId)
         {
-            return File(await _videoService.GetBinaryByIdAsync(videoId), "video/mp4") ;
+            return await _videoService.GetBinaryByIdAsync(videoId);
         }
 
         [HttpGet]

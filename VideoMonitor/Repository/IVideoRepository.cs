@@ -4,7 +4,7 @@ namespace VideoMonitor.Repository
 {
     public interface IVideoRepository
     {
-        Task AddAsync(Video video);
+        Task<Guid> AddAsync(Video video);
         Task DeleteAsync(Guid videoId);
         Task<IEnumerable<Video>> GetAllAsync();
         Task<Video> GetByIdAsync(Guid videoId);

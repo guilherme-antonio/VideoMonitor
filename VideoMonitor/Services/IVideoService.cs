@@ -8,7 +8,7 @@ namespace VideoMonitor.Services
         Task AddAsync(VideoAddResource videoResource, Guid serverId);
         Task DeleteAsync(Guid videoId);
         Task<IEnumerable<Video>> GetAllAsync();
-        Task<byte[]> GetBinaryByIdAsync(Guid videoId);
+        Task<string> GetBinaryByIdAsync(Guid videoId);
         Task<Video> GetByIdAsync(Guid videoId);
     }
 }
