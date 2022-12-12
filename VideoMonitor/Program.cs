@@ -13,7 +13,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IServerService, ServerService>();
 builder.Services.AddTransient<IVideoService, VideoService>();
-builder.Services.AddSingleton<IPingService, PingService>();   
+builder.Services.AddSingleton<IPingService, PingService>();
+builder.Services.AddSingleton<IRecyclerService, RecyclerService>();
 
 builder.Services.AddTransient<IServerRepository, ServerRepository>();
 builder.Services.AddTransient<IVideoRepository, VideoRepository>();

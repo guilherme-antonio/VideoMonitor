@@ -9,6 +9,19 @@
             return Convert.ToBase64String(await File.ReadAllBytesAsync($"{_path}{Path.DirectorySeparatorChar}{videoId}"));
         }
 
+        public async Task RemoveOldVideosAsync(int days)
+        {
+            Thread.Sleep(20000);
+            var files = Directory.GetFiles(_path);
+
+            foreach (var file in files)
+            {
+                FileInfo fi = new FileInfo(file);
+                if (fi.CreationTimeUtc < DateTime.UtcNow.AddDays(days))
+                    fi.Delete();
+            }
+        }
+
         public async Task SaveToFileAsync(Guid videoId, string binary)
         {
             Directory.CreateDirectory(_path);
