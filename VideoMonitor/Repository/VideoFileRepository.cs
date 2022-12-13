@@ -4,6 +4,12 @@
     {
         private string _path = $".{Path.DirectorySeparatorChar}videos";
 
+        public async Task DeleteVideoFileAsync(Guid videoId, Guid serverId)
+        {
+            FileInfo fi = new FileInfo($"{_path}{Path.DirectorySeparatorChar}{serverId}{Path.DirectorySeparatorChar}{videoId}");
+            fi.Delete();
+        }
+
         public async Task<string> GetVideoBinaryAsync(Guid videoId, Guid serverId)
         {
             return Convert.ToBase64String(await File.ReadAllBytesAsync($"{_path}{Path.DirectorySeparatorChar}{serverId}{Path.DirectorySeparatorChar}{videoId}"));
@@ -11,14 +17,20 @@
 
         public async Task RemoveOldVideosAsync(int days)
         {
-            var files = Directory.GetFiles(_path);
+            var servers = Directory.GetDirectories(_path);
 
-            foreach (var file in files)
+            foreach (var server in servers)
             {
-                FileInfo fi = new FileInfo(file);
-                if (fi.CreationTimeUtc < DateTime.UtcNow.AddDays(days))
-                    fi.Delete();
+                var videos = Directory.GetFiles(server);
+
+                foreach (var video in videos)
+                {
+                    FileInfo fi = new FileInfo(video);
+                    if (fi.CreationTimeUtc < DateTime.UtcNow.AddDays(days))
+                        fi.Delete();
+                }
             }
+            
         }
 
         public async Task SaveToFileAsync(Guid videoId, string binary, Guid serverId)

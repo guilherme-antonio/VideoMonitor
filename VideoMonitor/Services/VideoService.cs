@@ -32,6 +32,7 @@ namespace VideoMonitor.Services
         public async Task DeleteAsync(Guid videoId, Guid serverId)
         {
             await _videoRepository.DeleteAsync(videoId, serverId);
+            await _videoFileRepository.DeleteVideoFileAsync(videoId, serverId);
         }
 
         public async Task<IEnumerable<Video>> GetAllAsync(Guid serverId)

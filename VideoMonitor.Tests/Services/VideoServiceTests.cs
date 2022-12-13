@@ -56,6 +56,7 @@ namespace VideoMonitor.Tests.Services
             await _videoService.DeleteAsync(videoId, serverId);
 
             _videoRepository.Verify(x => x.DeleteAsync(videoId, serverId));
+            _fileRepository.Verify(x => x.DeleteVideoFileAsync(videoId, serverId));
         }
 
         [Fact]
