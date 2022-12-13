@@ -34,7 +34,12 @@ namespace VideoMonitor.Tests.Services
             var serverId = Guid.NewGuid();
             var videoId = Guid.NewGuid();
 
-            _videoRepository.Setup(x => x.AddAsync(It.Is<Video>(x => video.Description == description))).ReturnsAsync(videoId);
+            var newVideo = new Video()
+            {
+                Id = videoId
+            };
+
+            _videoRepository.Setup(x => x.AddAsync(It.Is<Video>(x => video.Description == description))).ReturnsAsync(newVideo);
 
             await _videoService.AddAsync(video, serverId);
 
