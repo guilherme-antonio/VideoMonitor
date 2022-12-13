@@ -25,8 +25,11 @@
         public async Task SaveToFileAsync(Guid videoId, string binary)
         {
             Directory.CreateDirectory(_path);
-            await File.Create($"{_path}{Path.DirectorySeparatorChar}{videoId}")
-                .WriteAsync(Convert.FromBase64String(binary));
+
+            using (var file = File.Create($"{_path}{Path.DirectorySeparatorChar}{videoId}"))
+            {
+                await file.WriteAsync(Convert.FromBase64String(binary));
+            }
         }
     }
 }
