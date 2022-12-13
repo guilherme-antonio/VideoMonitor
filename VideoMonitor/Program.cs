@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using VideoMonitor.Context;
 using VideoMonitor.Repository;
 using VideoMonitor.Services;
@@ -24,17 +25,26 @@ builder.Services.AddScoped<VideoMonitorContext>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<VideoMonitorContext>();
+    if (context.Database.GetPendingMigrations().Any())
+    {
+        context.Database.Migrate();
+    }
+}
 
 app.Run();

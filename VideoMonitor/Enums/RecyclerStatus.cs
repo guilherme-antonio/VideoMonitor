@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace VideoMonitor.Enums
+﻿namespace VideoMonitor.Enums
 {
     public enum RecyclerStatus
     {

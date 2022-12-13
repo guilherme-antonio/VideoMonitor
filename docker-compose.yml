@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  videomonitor:
+    image: ${DOCKER_REGISTRY-}videomonitor
+    build:
+      context: .
+      dockerfile: VideoMonitor/Dockerfile
+    ports:
+    -   "80:80"
+    depends_on:
+      - postgres
+    networks:
+      - videomonitor-network
+
+  postgres:
+    image: "postgres"
+    environment:
+       - "POSTGRES_PASSWORD=v1d30m0n1tor"
+       - "POSTGRES_USER=admin"
+       - "POSTGRES_DB=default"
+    ports:
+    -   "5432:5432"
+    networks:
+      - videomonitor-network
+networks:
+  videomonitor-network:
