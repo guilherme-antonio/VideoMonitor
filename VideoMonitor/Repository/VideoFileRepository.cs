@@ -4,14 +4,13 @@
     {
         private string _path = $".{Path.DirectorySeparatorChar}videos";
 
-        public async Task<string> GetVideoBinaryAsync(Guid videoId)
+        public async Task<string> GetVideoBinaryAsync(Guid videoId, Guid serverId)
         {
-            return Convert.ToBase64String(await File.ReadAllBytesAsync($"{_path}{Path.DirectorySeparatorChar}{videoId}"));
+            return Convert.ToBase64String(await File.ReadAllBytesAsync($"{_path}{Path.DirectorySeparatorChar}{serverId}{Path.DirectorySeparatorChar}{videoId}"));
         }
 
         public async Task RemoveOldVideosAsync(int days)
         {
-            Thread.Sleep(20000);
             var files = Directory.GetFiles(_path);
 
             foreach (var file in files)
@@ -22,11 +21,11 @@
             }
         }
 
-        public async Task SaveToFileAsync(Guid videoId, string binary)
+        public async Task SaveToFileAsync(Guid videoId, string binary, Guid serverId)
         {
-            Directory.CreateDirectory(_path);
+            Directory.CreateDirectory($"{_path}{Path.DirectorySeparatorChar}{serverId}");
 
-            using (var file = File.Create($"{_path}{Path.DirectorySeparatorChar}{videoId}"))
+            using (var file = File.Create($"{_path}{Path.DirectorySeparatorChar}{serverId}{Path.DirectorySeparatorChar}{videoId}"))
             {
                 await file.WriteAsync(Convert.FromBase64String(binary));
             }

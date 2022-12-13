@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 using VideoMonitor.Models;
 
 namespace VideoMonitor.Context
@@ -19,5 +18,10 @@ namespace VideoMonitor.Context
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseNpgsql(@$"Host={_postgreSQLConfig.Host};Username={_postgreSQLConfig.Username};
                                     Password={_postgreSQLConfig.Password};Database={_postgreSQLConfig.Database}");
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Video>().HasOne<Server>().WithMany().HasForeignKey(x => x.ServerId);
+        }
     }
 }

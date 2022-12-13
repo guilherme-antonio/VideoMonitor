@@ -24,20 +24,20 @@ namespace VideoMonitor.Repository
             return newVideo.Entity;
         }
 
-        public async Task DeleteAsync(Guid videoId)
+        public async Task DeleteAsync(Guid videoId, Guid serverId)
         {
-            await _videos.Where(x => x.Id == videoId).ExecuteDeleteAsync();
+            await _videos.Where(x => x.ServerId == serverId && x.Id == videoId).ExecuteDeleteAsync();
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Video> GetByIdAsync(Guid videoId)
+        public async Task<Video> GetByIdAsync(Guid videoId, Guid serverId)
         {
-            return await _videos.Where(x => x.Id == videoId).FirstOrDefaultAsync();
+            return await _videos.Where(x => x.ServerId == serverId && x.Id == videoId).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Video>> GetAllAsync()
+        public async Task<IEnumerable<Video>> GetAllAsync(Guid serverId)
         {
-            return await _videos.ToListAsync();
+            return await _videos.Where(x => x.ServerId == serverId).ToListAsync();
         }
     }
 }

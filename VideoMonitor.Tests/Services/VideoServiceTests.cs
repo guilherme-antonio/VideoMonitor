@@ -44,31 +44,33 @@ namespace VideoMonitor.Tests.Services
             await _videoService.AddAsync(video, serverId);
 
             _videoRepository.Verify(x => x.AddAsync(It.Is<Video>(x => video.Description == description)));
-            _fileRepository.Verify(x => x.SaveToFileAsync(videoId, binary));
+            _fileRepository.Verify(x => x.SaveToFileAsync(videoId, binary, serverId));
         }
 
         [Fact]
         public async Task DeleteAsync_ReceiveVideoId_DeleteFromRepositoryByVideoId()
         {
+            var serverId = Guid.NewGuid();
             var videoId = Guid.NewGuid();
 
-            await _videoService.DeleteAsync(videoId);
+            await _videoService.DeleteAsync(videoId, serverId);
 
-            _videoRepository.Verify(x => x.DeleteAsync(videoId));
+            _videoRepository.Verify(x => x.DeleteAsync(videoId, serverId));
         }
 
         [Fact]
         public async Task GetByIdAsync_ReceiveVideoId_RetrieveVideoWithVideoId()
         {
+            var serverId = Guid.NewGuid();
             var videoId = Guid.NewGuid();
 
             var video = new Video();
 
-            _videoRepository.Setup(x => x.GetByIdAsync(videoId)).ReturnsAsync(video);
+            _videoRepository.Setup(x => x.GetByIdAsync(videoId, serverId)).ReturnsAsync(video);
 
-            var retrievedVideo = await _videoService.GetByIdAsync(videoId);
+            var retrievedVideo = await _videoService.GetByIdAsync(videoId, serverId);
 
-            _videoRepository.Verify(x => x.GetByIdAsync(videoId));
+            _videoRepository.Verify(x => x.GetByIdAsync(videoId, serverId));
 
             retrievedVideo.Should().Be(video);
         }
@@ -76,11 +78,13 @@ namespace VideoMonitor.Tests.Services
         [Fact]
         public async Task GetAllAsync_ExistsVideos_ReturnAllVideos()
         {
+            var serverId = Guid.NewGuid();
+
             var videos = new List<Video>();
 
-            _videoRepository.Setup(x => x.GetAllAsync()).ReturnsAsync(videos);
+            _videoRepository.Setup(x => x.GetAllAsync(serverId)).ReturnsAsync(videos);
 
-            var returnedVideos = await _videoService.GetAllAsync();
+            var returnedVideos = await _videoService.GetAllAsync(serverId);
 
             returnedVideos.Should().BeSameAs(videos);
         }

@@ -2,8 +2,8 @@
 {
     public interface IVideoFileRepository
     {
-        Task<string> GetVideoBinaryAsync(Guid videoId);
+        Task<string> GetVideoBinaryAsync(Guid videoId, Guid serverId);
         Task RemoveOldVideosAsync(int days);
-        Task SaveToFileAsync(Guid videoId, string binary);
+        Task SaveToFileAsync(Guid videoId, string binary, Guid serverId);
     }
 }

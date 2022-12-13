@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using VideoMonitor.Models;
 using VideoMonitor.Resources;
 using VideoMonitor.Services;
 
@@ -28,11 +29,12 @@ namespace VideoMonitor.Controllers
                 var videoGetResource = new VideoGetResource()
                 {
                     Id = video.Id,
-                    Description = video.Description
+                    Description = video.Description,
+                    ServerId = video.ServerId
                 };
                 return TypedResults.Created(location, videoGetResource);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return TypedResults.BadRequest();
             }
@@ -45,7 +47,7 @@ namespace VideoMonitor.Controllers
         {
             try
             {
-                await _videoService.DeleteAsync(videoId);
+                await _videoService.DeleteAsync(videoId, serverId);
                 return TypedResults.Ok();
             }
             catch (Exception)
@@ -61,7 +63,7 @@ namespace VideoMonitor.Controllers
         {
             try
             {
-                var video = await _videoService.GetByIdAsync(videoId);
+                var video = await _videoService.GetByIdAsync(videoId, serverId);
 
                 if (video is null || video.Id == Guid.Empty)
                     return TypedResults.NotFound();
@@ -69,7 +71,8 @@ namespace VideoMonitor.Controllers
                 return TypedResults.Ok(new VideoGetResource()
                 {
                     Id = video.Id,
-                    Description = video.Description
+                    Description = video.Description,
+                    ServerId = video.ServerId
                 });
             }
             catch (Exception)
@@ -85,7 +88,7 @@ namespace VideoMonitor.Controllers
         {
             try
             {
-                var binary = await _videoService.GetBinaryByIdAsync(videoId);
+                var binary = await _videoService.GetBinaryByIdAsync(videoId, serverId);
                 
                 if (string.IsNullOrWhiteSpace(binary))
                     return TypedResults.NotFound();
@@ -99,11 +102,11 @@ namespace VideoMonitor.Controllers
         }
 
         [HttpGet]
-        public async Task<Results<BadRequest, NoContent, Ok<IEnumerable<VideoGetResource>>>> GetAllAsync()
+        public async Task<Results<BadRequest, NoContent, Ok<IEnumerable<VideoGetResource>>>> GetAllAsync(Guid serverId)
         {
             try
             {
-                var videos = await _videoService.GetAllAsync();
+                var videos = await _videoService.GetAllAsync(serverId);
 
                 if (!videos.Any())
                     return TypedResults.NoContent();
@@ -111,7 +114,8 @@ namespace VideoMonitor.Controllers
                 return TypedResults.Ok(videos.Select(x => new VideoGetResource
                 {
                     Id = x.Id,
-                    Description = x.Description
+                    Description = x.Description,
+                    ServerId = x.ServerId
                 }));
             }
             catch (Exception)

@@ -19,33 +19,34 @@ namespace VideoMonitor.Services
         {
             var video = new Video()
             {
-                Description = videoResource.Description
+                Description = videoResource.Description,
+                ServerId = serverId
             };
             var videoCreated = await _videoRepository.AddAsync(video);
 
-            await _videoFileRepository.SaveToFileAsync(videoCreated.Id, videoResource.Binary);
+            await _videoFileRepository.SaveToFileAsync(videoCreated.Id, videoResource.Binary, serverId);
 
             return videoCreated;
         }
 
-        public async Task DeleteAsync(Guid videoId)
+        public async Task DeleteAsync(Guid videoId, Guid serverId)
         {
-            await _videoRepository.DeleteAsync(videoId);
+            await _videoRepository.DeleteAsync(videoId, serverId);
         }
 
-        public async Task<IEnumerable<Video>> GetAllAsync()
+        public async Task<IEnumerable<Video>> GetAllAsync(Guid serverId)
         {
-            return await _videoRepository.GetAllAsync();
+            return await _videoRepository.GetAllAsync(serverId);
         }
 
-        public async Task<string> GetBinaryByIdAsync(Guid videoId)
+        public async Task<string> GetBinaryByIdAsync(Guid videoId, Guid serverId)
         {
-            return await _videoFileRepository.GetVideoBinaryAsync(videoId);
+            return await _videoFileRepository.GetVideoBinaryAsync(videoId, serverId);
         }
 
-        public async Task<Video> GetByIdAsync(Guid videoId)
+        public async Task<Video> GetByIdAsync(Guid videoId, Guid serverId)
         {
-            return await _videoRepository.GetByIdAsync(videoId);
+            return await _videoRepository.GetByIdAsync(videoId, serverId);
         }
     }
 }
