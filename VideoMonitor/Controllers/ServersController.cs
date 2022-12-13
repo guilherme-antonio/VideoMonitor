@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using VideoMonitor.Models;
 using VideoMonitor.Resources;
 using VideoMonitor.Services;
 
@@ -16,50 +18,108 @@ namespace VideoMonitor.Controllers
         }
 
         [HttpPost]
-        public async Task AddAsync(ServerAddResource serverAddResource)
+        public async Task<Results<BadRequest, Created<ServerGetResource>>> AddAsync(ServerAddResource serverAddResource)
         {
-            await _serverService.AddAsync(serverAddResource);
+            try
+            {
+                var server = await _serverService.AddAsync(serverAddResource);
+                
+                var location = Url.Action(nameof(GetByIdAsync), new { id = server.Id }) ?? $"/{server.Id}";
+
+                var serverGetResource = new ServerGetResource()
+                {
+                    Id = server.Id,
+                    Ip = server.Ip,
+                    Name = server.Name,
+                    Port = server.Port
+                };
+                return TypedResults.Created(location, serverGetResource);
+            }
+            catch (Exception)
+            {
+                return TypedResults.BadRequest();
+            }
+            
         }
 
         [HttpDelete]
         [Route("{serverId}​")]
-        public async Task DeleteAsync(Guid serverId)
+        public async Task<Results<BadRequest, NotFound, Ok>> DeleteAsync(Guid serverId)
         {
-            await _serverService.DeleteAsync(serverId);
+            try
+            {
+                await _serverService.DeleteAsync(serverId);
+                return TypedResults.Ok();
+            }
+            catch (Exception)
+            {
+                return TypedResults.BadRequest();
+            }
+            
         }
 
         [HttpGet]
         [Route("{serverId}​")]
-        public async Task<ServerGetResource> GetByIdAsync(Guid serverId)
+        public async Task<Results<BadRequest, NotFound, Ok<ServerGetResource>>> GetByIdAsync(Guid serverId)
         {
-            var server = await _serverService.GetByIdAsync(serverId);
-
-            return new ServerGetResource()
+            try
             {
-                Id = server.Id,
-                Ip = server.Ip,
-                Name = server.Name,
-                Port = server.Port
-            };
+                var server = await _serverService.GetByIdAsync(serverId);
+
+                if (server is null || server.Id == Guid.Empty)
+                    return TypedResults.NotFound();
+
+                return TypedResults.Ok(new ServerGetResource()
+                {
+                    Id = server.Id,
+                    Ip = server.Ip,
+                    Name = server.Name,
+                    Port = server.Port
+                });
+            }
+            catch (Exception)
+            {
+                return TypedResults.BadRequest();
+            }
+            
         }
 
         [HttpGet]
         [Route("available/{serverId}")]
-        public async Task<bool> IsAvailableAsync(Guid serverId)
+        public async Task<Results<BadRequest, NotFound, Ok<bool>>> IsAvailableAsync(Guid serverId)
         {
-            return await _serverService.IsAvailableAsync(serverId);
+            try
+            {
+                return TypedResults.Ok(await _serverService.IsAvailableAsync(serverId));
+            }
+            catch (Exception)
+            {
+                return TypedResults.BadRequest();
+            }
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ServerGetResource>> GetAllAsync()
+        public async Task<Results<BadRequest, NoContent, Ok<IEnumerable<ServerGetResource>>>> GetAllAsync()
         {
-            return (await _serverService.GetAllAsync()).Select(x => new ServerGetResource
+            try
             {
-                Id= x.Id,
-                Ip= x.Ip,
-                Name= x.Name,
-                Port = x.Port
-            });
+                var servers = await _serverService.GetAllAsync();
+
+                if (!servers.Any())
+                    return TypedResults.NoContent();
+
+                return TypedResults.Ok(servers.Select(x => new ServerGetResource
+                {
+                    Id = x.Id,
+                    Ip = x.Ip,
+                    Name = x.Name,
+                    Port = x.Port
+                }));
+            }
+            catch (Exception)
+            {
+                return TypedResults.BadRequest();
+            }
         }
     }
 }

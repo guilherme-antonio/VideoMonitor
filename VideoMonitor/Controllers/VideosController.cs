@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using VideoMonitor.Resources;
 using VideoMonitor.Services;
 
@@ -16,45 +17,108 @@ namespace VideoMonitor.Controllers
         }
 
         [HttpPost]
-        public async Task AddAsync(Guid serverId, VideoAddResource videoResource)
+        public async Task<Results<BadRequest, Created<VideoGetResource>>> AddAsync(Guid serverId, VideoAddResource videoResource)
         {
-            await _videoService.AddAsync(videoResource, serverId);
+            try
+            {
+                var video = await _videoService.AddAsync(videoResource, serverId);
+
+                var location = Url.Action(nameof(GetByIdAsync), new { id = video.Id }) ?? $"/{video.Id}";
+
+                var videoGetResource = new VideoGetResource()
+                {
+                    Id = video.Id,
+                    Description = video.Description
+                };
+                return TypedResults.Created(location, videoGetResource);
+            }
+            catch (Exception)
+            {
+                return TypedResults.BadRequest();
+            }
+            
         }
 
         [HttpDelete]
         [Route("{videoId}​")]
-        public async Task DeleteAsync(Guid serverId, Guid videoId)
+        public async Task<Results<BadRequest, NotFound, Ok>> DeleteAsync(Guid serverId, Guid videoId)
         {
-            await _videoService.DeleteAsync(videoId);
+            try
+            {
+                await _videoService.DeleteAsync(videoId);
+                return TypedResults.Ok();
+            }
+            catch (Exception)
+            {
+                return TypedResults.BadRequest();
+            }
+            
         }
 
         [HttpGet]
         [Route("{videoId}​")]
-        public async Task<VideoGetResource> GetByIdAsync(Guid serverId, Guid videoId)
+        public async Task<Results<BadRequest, NotFound, Ok<VideoGetResource>>> GetByIdAsync(Guid serverId, Guid videoId)
         {
-            var video = await _videoService.GetByIdAsync(videoId);
-            return new VideoGetResource()
+            try
             {
-                Id = video.Id,
-                Description = video.Description
-            };
+                var video = await _videoService.GetByIdAsync(videoId);
+
+                if (video is null || video.Id == Guid.Empty)
+                    return TypedResults.NotFound();
+
+                return TypedResults.Ok(new VideoGetResource()
+                {
+                    Id = video.Id,
+                    Description = video.Description
+                });
+            }
+            catch (Exception)
+            {
+                return TypedResults.BadRequest();
+            }
+            
         }
 
         [HttpGet]
         [Route("{videoId}/binary​")]
-        public async Task<string> GetBinaryByIdAsync(Guid serverId, Guid videoId)
+        public async Task<Results<BadRequest, NotFound, Ok<string>>> GetBinaryByIdAsync(Guid serverId, Guid videoId)
         {
-            return await _videoService.GetBinaryByIdAsync(videoId);
+            try
+            {
+                var binary = await _videoService.GetBinaryByIdAsync(videoId);
+                
+                if (string.IsNullOrWhiteSpace(binary))
+                    return TypedResults.NotFound();
+
+                return TypedResults.Ok(binary);
+            }
+            catch (Exception)
+            {
+                return TypedResults.BadRequest();
+            }
         }
 
         [HttpGet]
-        public async Task<IEnumerable<VideoGetResource>> GetAllAsync()
+        public async Task<Results<BadRequest, NoContent, Ok<IEnumerable<VideoGetResource>>>> GetAllAsync()
         {
-            return (await _videoService.GetAllAsync()).Select(x => new VideoGetResource
+            try
             {
-                Id = x.Id,
-                Description = x.Description
-            });
+                var videos = await _videoService.GetAllAsync();
+
+                if (!videos.Any())
+                    return TypedResults.NoContent();
+
+                return TypedResults.Ok(videos.Select(x => new VideoGetResource
+                {
+                    Id = x.Id,
+                    Description = x.Description
+                }));
+            }
+            catch (Exception)
+            {
+                return TypedResults.BadRequest();
+            }
+            
         }
     }
 }

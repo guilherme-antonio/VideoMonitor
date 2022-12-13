@@ -17,11 +17,11 @@ namespace VideoMonitor.Repository
             _context = context;
         }
 
-        public async Task<Guid> AddAsync(Video video)
+        public async Task<Video> AddAsync(Video video)
         {
             var newVideo = await _videos.AddAsync(video);
             await _context.SaveChangesAsync();
-            return newVideo.Entity.Id;
+            return newVideo.Entity;
         }
 
         public async Task DeleteAsync(Guid videoId)

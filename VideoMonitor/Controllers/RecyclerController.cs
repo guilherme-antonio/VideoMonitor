@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using VideoMonitor.Resources;
 using VideoMonitor.Services;
 
@@ -17,17 +18,36 @@ namespace VideoMonitor.Controllers
 
         [HttpPost]
         [Route("process/{days}")]
-        public async Task ProcessAsync(int days)
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<Results<BadRequest, Accepted>> ProcessAsync(int days)
         {
-            await _recyclerService.ProcessAsync(days);
+            try
+            {
+                await _recyclerService.ProcessAsync(days);
+                return TypedResults.Accepted(Url.Action(nameof(GetStatusAsync)) ?? "/status");
+            }
+            catch (Exception)
+            {
+                return TypedResults.BadRequest();
+            }
+            
         }
 
         [HttpGet]
         [Route("status")]
-        public async Task<RecyclerStatusResource> GetStatusAsync()
+        public async Task<Results<BadRequest, Ok<RecyclerStatusResource>>> GetStatusAsync()
         {
-            var status = await _recyclerService.GetStatusAsync();
-            return new RecyclerStatusResource(status);
+            try
+            {
+                var status = await _recyclerService.GetStatusAsync();
+                return TypedResults.Ok(new RecyclerStatusResource(status));
+            }
+            catch (Exception)
+            {
+                return TypedResults.BadRequest();
+            }
+            
         }
     }
 }

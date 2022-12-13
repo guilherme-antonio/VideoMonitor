@@ -20,12 +20,15 @@ namespace VideoMonitor.Services
 
         public async Task ProcessAsync(int days)
         {
-            if (_status == RecyclerStatus.Running)
-                return;
+            Task.Run(async () =>
+            {
+                if (_status == RecyclerStatus.Running)
+                    return;
 
-            _status = RecyclerStatus.Running;
-            await _videoFileRepository.RemoveOldVideosAsync(days);
-            _status = RecyclerStatus.NotRunning;
+                _status = RecyclerStatus.Running;
+                await _videoFileRepository.RemoveOldVideosAsync(days);
+                _status = RecyclerStatus.NotRunning;
+            });
         }
     }
 }

@@ -16,10 +16,12 @@ namespace VideoMonitor.Repository
             _context = context;
         }
 
-        public async Task AddAsync(Server server)
+        public async Task<Server> AddAsync(Server server)
         {
-            await _servers.AddAsync(server);
+            var newServer = await _servers.AddAsync(server);
             await _context.SaveChangesAsync();
+
+            return newServer.Entity;
         }
 
         public async Task DeleteAsync(Guid serverId)

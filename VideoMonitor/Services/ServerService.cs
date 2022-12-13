@@ -15,7 +15,7 @@ namespace VideoMonitor.Services
             _pingService = pingService;
         }
 
-        public async Task AddAsync(ServerAddResource serverAddResource)
+        public async Task<Server> AddAsync(ServerAddResource serverAddResource)
         {
             var server = new Server()
             {
@@ -24,7 +24,7 @@ namespace VideoMonitor.Services
                 Port = serverAddResource.Port,
             };
 
-            await _serverRepository.AddAsync(server);
+            return await _serverRepository.AddAsync(server);
         }
 
         public async Task DeleteAsync(Guid serverId)

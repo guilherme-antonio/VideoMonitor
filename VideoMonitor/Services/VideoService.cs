@@ -15,15 +15,17 @@ namespace VideoMonitor.Services
             _videoFileRepository = videoFileRepository;
         }
 
-        public async Task AddAsync(VideoAddResource videoResource, Guid serverId)
+        public async Task<Video> AddAsync(VideoAddResource videoResource, Guid serverId)
         {
             var video = new Video()
             {
                 Description = videoResource.Description
             };
-            var videoId = await _videoRepository.AddAsync(video);
+            var videoCreated = await _videoRepository.AddAsync(video);
 
-            await _videoFileRepository.SaveToFileAsync(videoId, videoResource.Binary);
+            await _videoFileRepository.SaveToFileAsync(videoCreated.Id, videoResource.Binary);
+
+            return videoCreated;
         }
 
         public async Task DeleteAsync(Guid videoId)
